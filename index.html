@@ -1,111 +1,81 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>Krazy Sensi .IA</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Krazy Sensi .IA</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <h1 id="tituloApp">Krazy Sensi .IA</h1>
 
-<h1 id="tituloApp">🔥 KRAZY SENSI .IA 🔥</h1>
-
-<!-- LOGIN -->
-<div id="loginArea" class="card">
-  <h2>Digite sua Key</h2>
-  <input type="text" id="inputKey" placeholder="KZ-XXXXXXX">
-  <button onclick="validarKey()">Entrar</button>
-  <p id="status"></p>
-</div>
-
-<!-- GERADOR -->
-<div id="geradorArea" class="card" style="display:none;">
-  <div id="tabs">
-    <button onclick="abrirTab('celular')">📱 Celular</button>
-    <button onclick="abrirTab('arma')">🎯 Arma</button>
-    <button onclick="abrirTab('dpi')">🎛️ DPI</button>
-    <button onclick="abrirTab('ciclos')">🍎 Ciclos iPhone</button>
-    <button onclick="abrirTab('rede')">❤️ Minha Rede</button>
-  </div>
-
-  <!-- CELULAR -->
-  <div id="celular" class="tabContent">
-    <h3>Gerar Sensi por Celular</h3>
-    <label>Marca</label><br>
-    <select id="marca">
-      <option>Samsung</option>
-      <option>Xiaomi</option>
-      <option>Motorola</option>
-      <option>iPhone</option>
-    </select>
-    <br><br>
-    <label>Modelo</label><br>
-    <input type="text" id="modelo" placeholder="Ex: Redmi Note 7">
-    <br><br>
-    <label>Potência do Celular</label><br>
-    <select id="potencia">
-      <option value="baixa">Baixa</option>
-      <option value="media">Média</option>
-      <option value="alta">Alta</option>
-    </select>
-    <br><br>
-    <button onclick="gerarSensi('celular')">Gerar Sensibilidade</button>
-    <div id="resultadoSensi"></div>
-  </div>
-
-  <!-- ARMA -->
-  <div id="arma" class="tabContent">
-    <h3>Gerar Sensi por Arma</h3>
-    <div id="armas">
-      <button onclick="gerarSensi('arma','UMP')">UMP 🎯</button>
-      <button onclick="gerarSensi('arma','XM8')">XM8 🎯</button>
-      <button onclick="gerarSensi('arma','Desert')">Desert 🎯</button>
-      <button onclick="gerarSensi('arma','M1014')">M1014 🎯</button>
-      <button onclick="gerarSensi('arma','Carapina')">Carapina 🎯</button>
-      <button onclick="gerarSensi('arma','AC80')">AC80 🎯</button>
+    <div id="tabs" class="card">
+        <button onclick="abrirTab('celular')">Sensi por Celular 📱</button>
+        <button onclick="abrirTab('arma')">Sensi por Arma 🎯</button>
+        <button onclick="abrirTab('dpi')">Calculador de DPI 🍏</button>
+        <button onclick="abrirTab('ciclos')">Ciclos iPhone 🍎</button>
+        <button onclick="abrirTab('redes')">Redes ❤️</button>
     </div>
-    <div id="resultadoArma"></div>
-  </div>
 
-  <!-- DPI -->
-  <div id="dpi" class="tabContent">
-    <h3>Calculador Inteligente de DPI</h3>
-    <label>Sensi Geral</label><br>
-    <input type="number" id="sensiDPI" placeholder="Ex: 150">
-    <button onclick="calcularDPI()">Calcular DPI</button>
-    <div id="resultadoDPI"></div>
-  </div>
+    <div id="loading">IA processando...</div>
 
-  <!-- CICLOS IPHONE -->
-  <div id="ciclos" class="tabContent">
-    <h3>Calculador de Ciclos iPhone 🍎</h3>
-    <label>DPI</label><br>
-    <input type="number" id="dpiIphone" placeholder="Ex: 800">
-    <label>Sensi</label><br>
-    <input type="number" id="sensiIphone" placeholder="Ex: 150">
-    <button onclick="calcularCiclos()">Calcular Ciclos</button>
-    <div id="resultadoCiclos"></div>
-  </div>
+    <div id="boxKey" class="card"></div>
 
-  <!-- REDES -->
-  <div id="rede" class="tabContent">
-    <h3>❤️ Siga @diggo_vini07</h3>
-    <p>Instagram: <a href="https://instagram.com/krazy" target="_blank">@diggo_vini07</a></p>
-    <p>Discord: <a href="#" target="_blank">Krazy Server</a></p>
-  </div>
-</div>
+    <!-- Abas -->
+    <div id="celular" class="tabContent card">
+        <h3>Gerar Sensi por Celular</h3>
+        <input type="text" id="marcaCelular" placeholder="Digite a marca">
+        <input type="text" id="modeloCelular" placeholder="Digite o modelo">
+        <button onclick="gerarSensi('celular')">Gerar Sensi</button>
+    </div>
 
-<!-- PAINEL ADM -->
-<div id="admPanel" class="card">
-  <h3>Painel ADM</h3>
-  <input type="text" id="dias" placeholder="Dias ou permanente">
-  <button onclick="gerarKey()">Gerar Key</button>
-  <div id="boxKey" style="display:none;">
-    <h3 id="keyGerada"></h3>
-    <button onclick="copiarKey()">📋 Copiar</button>
-    <p id="copiadoMsg"></p>
-  </div>
-</div>
+    <div id="arma" class="tabContent card">
+        <h3>Gerar Sensi por Arma</h3>
+        <select id="tipoArma">
+            <option>UMP</option>
+            <option>XM8</option>
+            <option>Desert</option>
+            <option>M1014</option>
+            <option>Carapina</option>
+            <option>AC80</option>
+        </select>
+        <button onclick="gerarSensi('arma')">Gerar Sensi</button>
+    </div>
 
-<script src="script.js" type="module"></script>
+    <div id="dpi" class="tabContent card">
+        <h3>Calculador de DPI Inteligente</h3>
+        <button onclick="gerarSensi('dpi')">Calcular DPI</button>
+    </div>
+
+    <div id="ciclos" class="tabContent card">
+        <h3>Ciclos para iPhone</h3>
+        <button onclick="gerarSensi('ciclos')">Calcular Ciclos</button>
+    </div>
+
+    <div id="redes" class="tabContent card">
+        <h3>Redes Sociais</h3>
+        <p>Siga: <a href="https://instagram.com/seuusuario" target="_blank">@seuusuario</a></p>
+    </div>
+
+    <!-- Painel ADM -->
+    <div id="admPanel" class="card">
+        <h3>Painel ADM</h3>
+        <button onclick="gerarKey()">Gerar Key Aleatória</button>
+    </div>
+
+    <!-- Script -->
+    <script src="script.js"></script>
+    <script>
+        // Função para alternar abas
+        function abrirTab(tabName) {
+            document.querySelectorAll('.tabContent').forEach(tab => {
+                tab.classList.remove('activeTab');
+            });
+            document.getElementById(tabName).classList.add('activeTab');
+        }
+
+        // Abrir a primeira aba por padrão
+        abrirTab('celular');
+    </script>
 </body>
-  </html>
+                              </html>
