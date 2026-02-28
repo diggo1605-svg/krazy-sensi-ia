@@ -1,24 +1,35 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Krazy Sensi .IA</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Krazy Sensi .IA</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+<!-- Tela de Login -->
+<div id="loginScreen" class="screen">
+    <h1>Krazy Sensi .IA</h1>
+    <input type="text" id="userKey" placeholder="Digite sua Key">
+    <button onclick="validarKey()">Entrar</button>
+</div>
+
+<!-- Tela Principal -->
+<div id="mainScreen" class="screen hidden">
+
     <h1 id="tituloApp">Krazy Sensi .IA</h1>
 
     <div id="tabs" class="card">
         <button onclick="abrirTab('celular')">Sensi por Celular 📱</button>
         <button onclick="abrirTab('arma')">Sensi por Arma 🎯</button>
         <button onclick="abrirTab('dpi')">Calculador de DPI 🍏</button>
-        <button onclick="abrirTab('ciclos')">Ciclos iPhone 🍎</button>
-        <button onclick="abrirTab('redes')">Redes ❤️</button>
+        <button onclick="abrirTab('famosos')">Sensis de Famosos ⭐</button>
+        <button onclick="abrirTab('minhas')">Minhas Sensis ❤️</button>
+        <button onclick="abrirTab('redes')">Redes Sociais 🔗</button>
     </div>
 
     <div id="loading">IA processando...</div>
-
     <div id="boxKey" class="card"></div>
 
     <!-- Abas -->
@@ -26,6 +37,12 @@
         <h3>Gerar Sensi por Celular</h3>
         <input type="text" id="marcaCelular" placeholder="Digite a marca">
         <input type="text" id="modeloCelular" placeholder="Digite o modelo">
+        <select id="modoCelular">
+            <option value="balanceada">Balanceada</option>
+            <option value="maisControle">Mais Controle</option>
+            <option value="muitoRapida">Muito Rápida</option>
+            <option value="maisCapa">Mais Capa</option>
+        </select>
         <button onclick="gerarSensi('celular')">Gerar Sensi</button>
     </div>
 
@@ -39,6 +56,11 @@
             <option>Carapina</option>
             <option>AC80</option>
         </select>
+        <select id="modoArma">
+            <option value="balanceado">Balanceado</option>
+            <option value="controle">Controle</option>
+            <option value="rapido">Rápido</option>
+        </select>
         <button onclick="gerarSensi('arma')">Gerar Sensi</button>
     </div>
 
@@ -47,9 +69,24 @@
         <button onclick="gerarSensi('dpi')">Calcular DPI</button>
     </div>
 
-    <div id="ciclos" class="tabContent card">
-        <h3>Ciclos para iPhone</h3>
-        <button onclick="gerarSensi('ciclos')">Calcular Ciclos</button>
+    <div id="famosos" class="tabContent card">
+        <h3>Sensis de Famosos</h3>
+        <select id="jogadorFamoso">
+            <option>ApelaPato</option>
+            <option>Marechal</option>
+            <option>Two9</option>
+            <option>Nobru</option>
+            <option>Freitas</option>
+            <option>Cerol</option>
+            <option>Fantasma</option>
+            <option>White444</option>
+        </select>
+        <button onclick="gerarSensi('famoso')">Gerar Sensi</button>
+    </div>
+
+    <div id="minhas" class="tabContent card">
+        <h3>Minhas Sensis Salvas</h3>
+        <div id="sensisSalvas"></div>
     </div>
 
     <div id="redes" class="tabContent card">
@@ -62,20 +99,15 @@
         <h3>Painel ADM</h3>
         <button onclick="gerarKey()">Gerar Key Aleatória</button>
     </div>
+</div>
 
-    <!-- Script -->
-    <script src="script.js"></script>
-    <script>
-        // Função para alternar abas
-        function abrirTab(tabName) {
-            document.querySelectorAll('.tabContent').forEach(tab => {
-                tab.classList.remove('activeTab');
-            });
-            document.getElementById(tabName).classList.add('activeTab');
-        }
-
-        // Abrir a primeira aba por padrão
-        abrirTab('celular');
-    </script>
+<script src="script.js"></script>
+<script>
+function abrirTab(tabName) {
+    document.querySelectorAll('.tabContent').forEach(tab => tab.classList.remove('activeTab'));
+    document.getElementById(tabName).classList.add('activeTab');
+}
+abrirTab('celular');
+</script>
 </body>
-                              </html>
+    </html>
