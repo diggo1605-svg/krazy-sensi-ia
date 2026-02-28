@@ -1,58 +1,162 @@
-body{
-  background:#0a0a0a;
-  color:white;
-  font-family:Arial, sans-serif;
-  text-align:center;
+body {
+    background: linear-gradient(135deg, #0a0a0a, #1a001a);
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    position: relative;
 }
-h1{cursor:pointer; font-size:3em; margin-top:20px;}
-button{
-  padding:15px 30px;
-  background:#8000ff;
-  border:none;
-  color:white;
-  cursor:pointer;
-  margin:10px 5px;
-  transition:0.2s, box-shadow 0.3s;
-  box-shadow:0 0 15px #8000ff;
-  border-radius:10px;
-  font-weight:bold;
-  font-size:16px;
+
+h1#tituloApp {
+    cursor: pointer;
+    font-size: 3.8em;
+    margin-top: 30px;
+    color: #bb00ff;
+    text-shadow: 0 0 10px #8000ff, 0 0 20px #bb00ff, 0 0 40px #ff00ff;
+    transition: 0.3s;
 }
-button:active{
-  transform:scale(0.95);
-  filter:brightness(70%);
-  box-shadow:0 0 25px #bb00ff;
+h1#tituloApp:hover {
+    text-shadow: 0 0 15px #bb00ff, 0 0 30px #ff00ff, 0 0 50px #bb00ff;
 }
-button:hover{
-  box-shadow:0 0 25px #bb00ff;
+
+.card {
+    background: rgba(20,0,30,0.9);
+    padding: 40px;
+    margin: 30px auto;
+    width: 540px;
+    border: 2px solid #8000ff;
+    box-shadow: 0 0 30px #8000ff, 0 0 60px #bb00ff, 0 0 90px #ff00ff;
+    border-radius: 20px;
+    animation: fadeCard 0.5s ease-in-out;
+    position: relative;
+    overflow: hidden;
 }
-input, select{
-  padding:12px;
-  margin-top:10px;
-  border-radius:6px;
-  border:none;
-  width:80%;
-  text-align:center;
+
+@keyframes fadeCard {
+    from {opacity: 0; transform: translateY(20px);}
+    to {opacity: 1; transform: translateY(0);}
 }
-.card{
-  background:#111;
-  padding:30px;
-  margin:20px auto;
-  width:500px;
-  border:2px solid #8000ff;
-  box-shadow:0 0 20px #8000ff;
-  border-radius:15px;
-  animation:fade 0.4s ease-in-out;
+
+button {
+    padding: 18px 38px;
+    background: linear-gradient(45deg, #8000ff, #bb00ff);
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    margin: 12px 6px;
+    transition: 0.2s, box-shadow 0.3s, transform 0.2s;
+    box-shadow: 0 0 25px #8000ff, 0 0 50px #bb00ff;
+    border-radius: 14px;
+    font-weight: bold;
+    font-size: 18px;
 }
-.card:hover{
-  box-shadow:0 0 35px #bb00ff;
+
+button:active {
+    transform: scale(0.93);
+    filter: brightness(65%);
+    box-shadow: 0 0 40px #bb00ff, 0 0 60px #ff00ff;
 }
-@keyframes fade{
-  from{opacity:0;transform:translateY(10px);}
-  to{opacity:1;transform:translateY(0);}
+
+button:hover {
+    box-shadow: 0 0 35px #bb00ff, 0 0 60px #ff00ff;
 }
-#admPanel{ display:none; width:500px;}
-#tabs button{margin:0 10px;}
-.tabContent{display:none; margin-top:20px;}
-.activeTab{display:block;}
-#loading{color:#bb00ff;font-weight:bold;font-size:18px;}
+
+input, select {
+    padding: 14px;
+    margin-top: 12px;
+    border-radius: 8px;
+    border: none;
+    width: 85%;
+    text-align: center;
+    font-size: 16px;
+}
+
+#tabs button {
+    margin: 0 12px;
+    font-size: 17px;
+    background: linear-gradient(45deg, #bb00ff, #8000ff);
+}
+
+.tabContent {
+    display: none;
+    margin-top: 25px;
+}
+
+.activeTab {
+    display: block;
+}
+
+#loading {
+    color: #bb00ff;
+    font-weight: bold;
+    font-size: 19px;
+    animation: blinkDots 1s infinite;
+}
+
+@keyframes blinkDots {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+#admPanel {
+    display: none;
+    width: 540px;
+}
+
+#boxKey {
+    margin-top: 15px;
+    padding: 14px;
+    background: rgba(60,0,60,0.8);
+    border-radius: 12px;
+    border: 1px solid #bb00ff;
+    box-shadow: 0 0 25px #bb00ff, 0 0 50px #ff00ff;
+    position: relative;
+}
+
+/* Barra de Loading futurista */
+#loading::after {
+    content: '';
+    display: block;
+    width: 80%;
+    height: 6px;
+    background: #bb00ff;
+    margin: 10px auto 0 auto;
+    border-radius: 3px;
+    animation: loadBar 2s infinite;
+}
+
+@keyframes loadBar {
+    0% { width: 0%; }
+    50% { width: 100%; }
+    100% { width: 0%; }
+}
+
+/* Partículas flutuantes */
+.particle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: #bb00ff;
+    border-radius: 50%;
+    animation: floatParticle 5s linear infinite;
+    opacity: 0.7;
+}
+
+@keyframes floatParticle {
+    0% { transform: translateY(0px) translateX(0px); opacity:0.7;}
+    50% { transform: translateY(-30px) translateX(20px); opacity:0.4;}
+    100% { transform: translateY(0px) translateX(0px); opacity:0.7;}
+}
+
+a {
+    color: #bb00ff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+a:hover {
+    color: #ff00ff;
+    text-shadow: 0 0 12px #bb00ff, 0 0 20px #ff00ff;
+}
