@@ -1,8 +1,8 @@
-// 🔹 PAINEL ADM
 let clickCount=0;
 const titulo=document.getElementById("tituloApp");
 const adm=document.getElementById("admPanel");
 const senhaADM="krazyadm071110";
+
 titulo.addEventListener("click",()=>{
     clickCount++;
     if(clickCount===7){
@@ -13,24 +13,23 @@ titulo.addEventListener("click",()=>{
     }
 });
 
-// 🔹 TABS
+// TABS
 function abrirTab(tabId){
   document.querySelectorAll(".tabContent").forEach(c=>c.style.display="none");
   document.getElementById(tabId).style.display="block";
 }
 
-// 🔹 GERAR KEY ADM
-async function gerarKey(){
+// GERAR KEY ADM
+function gerarKey(){
   const diasInput = document.getElementById("dias").value.trim();
   const permanente = diasInput.toLowerCase() === "permanente";
   if(!permanente && (isNaN(diasInput) || diasInput<=0)){ alert("Digite número válido ou 'permanente'"); return;}
   const novaKey = "KZ-"+Math.random().toString(36).substring(2,10).toUpperCase();
-  // Aqui você integraria Firebase ou outro banco
   document.getElementById("keyGerada").innerText = novaKey;
   document.getElementById("boxKey").style.display="block";
 }
 
-// 🔹 VALIDAR KEY
+// VALIDAR KEY
 function validarKey(){
   const key=document.getElementById("inputKey").value.trim().toUpperCase();
   if(key.startsWith("KZ-")){ 
@@ -40,7 +39,7 @@ function validarKey(){
   } else { document.getElementById("status").innerText="Key inválida ❌"; }
 }
 
-// 🔹 COPIAR KEY
+// COPIAR KEY
 function copiarKey(){
   const texto=document.getElementById("keyGerada").innerText;
   navigator.clipboard.writeText(texto);
@@ -48,7 +47,7 @@ function copiarKey(){
   setTimeout(()=>{ document.getElementById("copiadoMsg").innerText=""; },2000);
 }
 
-// 🔹 GERAR SENSI
+// GERAR SENSI
 async function gerarSensi(tipo, arma=null){
   const resultado = tipo==="arma"? document.getElementById("resultadoArma") : document.getElementById("resultadoSensi");
   resultado.innerHTML = `<div id="loading">Processando IA <span id="dots">...</span></div>`;
@@ -79,7 +78,7 @@ async function gerarSensi(tipo, arma=null){
   }
 }
 
-// 🔹 CALCULADOR DPI
+// CALCULAR DPI
 function calcularDPI(){
   const sensi=parseFloat(document.getElementById("sensiDPI").value);
   if(isNaN(sensi) || sensi<=0){ alert("Digite um valor válido"); return;}
@@ -88,7 +87,7 @@ function calcularDPI(){
   document.getElementById("resultadoDPI").innerHTML=`DPI recomendada: ${dpi}`;
 }
 
-// 🔹 CALCULADOR CICLOS IPHONE
+// CALCULAR CICLOS IPHONE
 function calcularCiclos(){
   const dpi=parseFloat(document.getElementById("dpiIphone").value);
   const sensi=parseFloat(document.getElementById("sensiIphone").value);
