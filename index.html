@@ -1,221 +1,174 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Krazy Sensi .IA</title>
+<meta charset="UTF-8">
+<title>Krazy Sensi .IA</title>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+<style>
+body{
+  background:#0a0a0a;
+  color:white;
+  font-family:Arial;
+  text-align:center;
+}
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCeGBR2ek8GlvMIWdQWzCpNI-eDaI_enV0",
-      authDomain: "krazy-sensi-ia.firebaseapp.com",
-      projectId: "krazy-sensi-ia",
-      storageBucket: "krazy-sensi-ia.firebasestorage.app",
-      messagingSenderId: "457003498171",
-      appId: "1:457003498171:web:58b73386b10e9d073ec79e"
-    };
+button{
+  padding:10px 20px;
+  background:#8000ff;
+  border:none;
+  color:white;
+  cursor:pointer;
+  margin-top:10px;
+  transition:0.2s;
+}
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+button:active{
+  transform:scale(0.95);
+  filter:brightness(70%);
+}
 
-    const SENHA_ADM = "Kz@2026ADM!#9";
+input{
+  padding:8px;
+  margin-top:10px;
+}
 
-    // 🔐 Abrir ADM
-    function abrirADM() {
-      const senha = prompt("Digite senha ADM:");
-      if (senha === SENHA_ADM) {
-        document.getElementById("painelADM").style.display = "block";
-      } else {
-        alert("Senha incorreta ❌");
-      }
-    }
+.card{
+  background:#111;
+  padding:20px;
+  margin:20px auto;
+  width:300px;
+  border:1px solid #8000ff;
+  box-shadow:0 0 15px #8000ff;
+  border-radius:10px;
+  animation:fade 0.4s ease-in-out;
+}
 
-    // 🔥 Gerar Key
-    async function gerarKey() {
-      const diasInput = document.getElementById("dias").value;
-      const permanente = diasInput.toLowerCase() === "permanente";
-
-      if (!permanente && (isNaN(diasInput) || diasInput <= 0)) {
-        alert("Digite número válido ou 'permanente'");
-        return;
-      }
-
-      const novaKey = "KZ-" + Math.random().toString(36).substring(2,10).toUpperCase();
-
-      await setDoc(doc(db, "keys", novaKey), {
-        ativa: true,
-        criadaEm: Date.now(),
-        duracaoDias: permanente ? 0 : parseInt(diasInput),
-        permanente: permanente
-      });
-
-      animarKey(novaKey);
-      document.getElementById("boxKey").style.display = "block";
-    }
-
-    // ✨ Animação digitando
-    function animarKey(texto) {
-      const elemento = document.getElementById("keyGerada");
-      elemento.innerText = "";
-      let i = 0;
-
-      const intervalo = setInterval(() => {
-        elemento.innerText += texto[i];
-        i++;
-        if (i >= texto.length) clearInterval(intervalo);
-      }, 80);
-    }
-
-    // 📋 Copiar
-    function copiarKey() {
-      const texto = document.getElementById("keyGerada").innerText;
-      navigator.clipboard.writeText(texto);
-      const msg = document.getElementById("copiadoMsg");
-      msg.innerText = "Copiado ✅";
-      setTimeout(() => msg.innerText = "", 2000);
-    }
-
-    // 🔎 Validar
-    async function validarKey() {
-      const keyDigitada = document.getElementById("key").value;
-      const docRef = doc(db, "keys", keyDigitada);
-      const docSnap = await getDoc(docRef);
-
-      if (!docSnap.exists()) {
-        alert("Key inválida ❌");
-        return;
-      }
-
-      const dados = docSnap.data();
-
-      if (!dados.ativa) {
-        alert("Key desativada ❌");
-        return;
-      }
-
-      if (!dados.permanente) {
-        const agora = Date.now();
-        const tempoTotal = dados.duracaoDias * 86400000;
-
-        if (agora - dados.criadaEm > tempoTotal) {
-          await updateDoc(docRef, { ativa: false });
-          alert("Key expirada ⛔");
-          return;
-        }
-
-        const restante = tempoTotal - (agora - dados.criadaEm);
-        const diasRestantes = Math.ceil(restante / 86400000);
-
-        document.getElementById("contador").innerText =
-          "Dias restantes: " + diasRestantes;
-      } else {
-        document.getElementById("contador").innerText =
-          "Key Permanente ♾️";
-      }
-
-      alert("Key válida 🔥");
-    }
-
-    window.validarKey = validarKey;
-    window.gerarKey = gerarKey;
-    window.abrirADM = abrirADM;
-    window.copiarKey = copiarKey;
-  </script>
-
-  <style>
-    body {
-      background: black;
-      color: #b300ff;
-      text-align: center;
-      font-family: Arial;
-    }
-
-    h1 {
-      text-shadow: 0 0 20px #b300ff;
-      animation: glow 1.5s infinite alternate;
-    }
-
-    @keyframes glow {
-      from { text-shadow: 0 0 10px #b300ff; }
-      to { text-shadow: 0 0 30px #ff00ff; }
-    }
-
-    input {
-      padding: 10px;
-      border: 2px solid #b300ff;
-      background: black;
-      color: white;
-    }
-
-    button {
-      padding: 10px 20px;
-      background: #b300ff;
-      border: none;
-      color: black;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.2s;
-      margin: 5px;
-    }
-
-    button:hover {
-      background: #9900cc;
-    }
-
-    button:active {
-      background: #660099;
-      transform: scale(0.95);
-    }
-
-    #painelADM {
-      display: none;
-      margin-top: 30px;
-    }
-
-    #boxKey {
-      display: none;
-      margin-top: 20px;
-    }
-
-    .neonBox {
-      padding: 15px;
-      border: 2px solid #b300ff;
-      background: black;
-      box-shadow: 0 0 20px #b300ff;
-    }
-  </style>
+@keyframes fade{
+  from{opacity:0;transform:translateY(10px);}
+  to{opacity:1;transform:translateY(0);}
+}
+</style>
 </head>
 
 <body>
 
-  <h1>Krazy Sensi .IA</h1>
+<h1>🔥 KRAZY SENSI .IA 🔥</h1>
 
-  <h3>Login Cliente</h3>
-  <input type="text" id="key" placeholder="Digite sua Key">
-  <br><br>
+<!-- LOGIN AREA -->
+<div id="loginArea" class="card">
+  <h3>Digite sua Key</h3>
+  <input type="text" id="inputKey" placeholder="KZ-XXXXXXX">
+  <br>
   <button onclick="validarKey()">Entrar</button>
+  <p id="status"></p>
+</div>
 
-  <p id="contador"></p>
+<!-- GERADOR AREA -->
+<div id="geradorArea" class="card" style="display:none;">
+  <h2>GERADOR LIBERADO 😈</h2>
+  <p>Aqui vai seu gerador de sensi...</p>
+</div>
 
-  <hr style="margin:40px;border-color:#b300ff;">
+<!-- PAINEL ADM -->
+<div class="card">
+  <h3>Painel ADM</h3>
+  <input type="text" id="dias" placeholder="Dias ou permanente">
+  <br>
+  <button onclick="gerarKey()">Gerar Key</button>
 
-  <button onclick="abrirADM()">Abrir Painel ADM</button>
-
-  <div id="painelADM">
-    <h3>Painel ADM</h3>
-    <input type="text" id="dias" placeholder="Digite dias ou 'permanente'">
-    <br><br>
-    <button onclick="gerarKey()">Gerar Key</button>
-
-    <div id="boxKey">
-      <div class="neonBox">
-        <h3 id="keyGerada" style="letter-spacing:2px;"></h3>
-        <button onclick="copiarKey()">📋 Copiar</button>
-        <p id="copiadoMsg"></p>
-      </div>
-    </div>
+  <div id="boxKey" style="display:none;margin-top:15px;">
+    <h3 id="keyGerada"></h3>
+    <button onclick="copiarKey()">📋 Copiar</button>
+    <p id="copiadoMsg"></p>
   </div>
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCeGBR2ek8GlvMIWdQWzCpNI-eDaI_enV0",
+  authDomain: "krazy-sensi-ia.firebaseapp.com",
+  projectId: "krazy-sensi-ia",
+  storageBucket: "krazy-sensi-ia.firebasestorage.app",
+  messagingSenderId: "457003498171",
+  appId: "1:457003498171:web:58b73386b10e9d073ec79e"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+async function gerarKey(){
+  const diasInput = document.getElementById("dias").value.trim();
+  const permanente = diasInput.toLowerCase() === "permanente";
+
+  if(!permanente && (isNaN(diasInput) || diasInput <= 0)){
+    alert("Digite número válido ou 'permanente'");
+    return;
+  }
+
+  const novaKey = "KZ-" + Math.random().toString(36).substring(2,10).toUpperCase();
+
+  await setDoc(doc(db,"keys",novaKey),{
+    ativa:true,
+    criadaEm:Date.now(),
+    duracaoDias: permanente ? 0 : parseInt(diasInput),
+    permanente: permanente
+  });
+
+  document.getElementById("keyGerada").innerText = novaKey;
+  document.getElementById("boxKey").style.display="block";
+}
+
+async function validarKey(){
+  const key = document.getElementById("inputKey").value.trim().toUpperCase();
+
+  const ref = doc(db,"keys",key);
+  const snap = await getDoc(ref);
+
+  if(!snap.exists()){
+    document.getElementById("status").innerText="Key inválida ❌";
+    return;
+  }
+
+  const dados = snap.data();
+
+  if(!dados.ativa){
+    document.getElementById("status").innerText="Key desativada ❌";
+    return;
+  }
+
+  if(!dados.permanente){
+    const agora = Date.now();
+    const expiraEm = dados.criadaEm + (dados.duracaoDias * 86400000);
+
+    if(agora > expiraEm){
+      document.getElementById("status").innerText="Key expirada ❌";
+      return;
+    }
+  }
+
+  document.getElementById("loginArea").style.display="none";
+  document.getElementById("geradorArea").style.display="block";
+}
+
+function copiarKey(){
+  const texto = document.getElementById("keyGerada").innerText;
+  navigator.clipboard.writeText(texto);
+
+  document.getElementById("copiadoMsg").innerText="Copiado ✅";
+  setTimeout(()=>{
+    document.getElementById("copiadoMsg").innerText="";
+  },2000);
+}
+
+window.validarKey = validarKey;
+window.gerarKey = gerarKey;
+window.copiarKey = copiarKey;
+
+</script>
 
 </body>
 </html>
