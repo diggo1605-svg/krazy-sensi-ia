@@ -1,62 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <title>Krazy Sensi .IA</title>
-<style>
-body{
-  background:#0a0a0a;
-  color:white;
-  font-family:Arial;
-  text-align:center;
-  overflow-x:hidden;
-}
-button{
-  padding:10px 20px;
-  background:#8000ff;
-  border:none;
-  color:white;
-  cursor:pointer;
-  margin-top:10px;
-  transition:0.2s, box-shadow 0.3s;
-  box-shadow:0 0 10px #8000ff;
-}
-button:active{
-  transform:scale(0.95);
-  filter:brightness(70%);
-  box-shadow:0 0 20px #bb00ff;
-}
-button:hover{
-  box-shadow:0 0 20px #bb00ff;
-}
-input, select{
-  padding:8px;
-  margin-top:10px;
-}
-.card{
-  background:#111;
-  padding:20px;
-  margin:20px auto;
-  width:350px;
-  border:1px solid #8000ff;
-  box-shadow:0 0 15px #8000ff;
-  border-radius:10px;
-  animation:fade 0.4s ease-in-out;
-  transition:0.3s;
-}
-.card:hover{
-  box-shadow:0 0 25px #bb00ff;
-}
-@keyframes fade{
-  from{opacity:0;transform:translateY(10px);}
-  to{opacity:1;transform:translateY(0);}
-}
-/* Painel ADM oculto */
-#admPanel{ display:none; width:350px;}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-<h1>🔥 KRAZY SENSI .IA 🔥</h1>
+
+<h1 id="tituloApp">🔥 KRAZY SENSI .IA 🔥</h1>
 
 <!-- LOGIN -->
 <div id="loginArea" class="card">
@@ -69,37 +20,81 @@ input, select{
 
 <!-- GERADOR -->
 <div id="geradorArea" class="card" style="display:none;">
-<h2>🔥 GERADOR KRAZY SENSI 🔥</h2>
+  <div id="tabs">
+    <button onclick="abrirTab('celular')">📱 Celular</button>
+    <button onclick="abrirTab('arma')">🎯 Arma</button>
+    <button onclick="abrirTab('dpi')">🎛️ DPI</button>
+    <button onclick="abrirTab('ciclos')">🍎 Ciclos iPhone</button>
+    <button onclick="abrirTab('rede')">❤️ Minha Rede</button>
+  </div>
 
-<label>Marca do Celular</label><br>
-<select id="marca">
-  <option>Samsung</option>
-  <option>Xiaomi</option>
-  <option>Motorola</option>
-  <option>iPhone</option>
-</select>
-<br><br>
+  <!-- CELULAR -->
+  <div id="celular" class="tabContent">
+    <h3>Gerar Sensi por Celular</h3>
+    <label>Marca</label><br>
+    <select id="marca">
+      <option>Samsung</option>
+      <option>Xiaomi</option>
+      <option>Motorola</option>
+      <option>iPhone</option>
+    </select>
+    <br><br>
+    <label>Modelo</label><br>
+    <input type="text" id="modelo" placeholder="Ex: Redmi Note 7">
+    <br><br>
+    <label>Potência do Celular</label><br>
+    <select id="potencia">
+      <option value="baixa">Baixa</option>
+      <option value="media">Média</option>
+      <option value="alta">Alta</option>
+    </select>
+    <br><br>
+    <button onclick="gerarSensi('celular')">Gerar Sensibilidade</button>
+    <div id="resultadoSensi" style="margin-top:20px; min-height:120px;"></div>
+  </div>
 
-<label>Modelo</label><br>
-<input type="text" id="modelo" placeholder="Ex: Redmi Note 7">
-<br><br>
+  <!-- ARMA -->
+  <div id="arma" class="tabContent">
+    <h3>Gerar Sensi por Arma</h3>
+    <div id="armas">
+      <button onclick="gerarSensi('arma','UMP')">UMP 🎯</button>
+      <button onclick="gerarSensi('arma','XM8')">XM8 🎯</button>
+      <button onclick="gerarSensi('arma','Desert')">Desert 🎯</button>
+      <button onclick="gerarSensi('arma','M1014')">M1014 🎯</button>
+      <button onclick="gerarSensi('arma','Carapina')">Carapina 🎯</button>
+      <button onclick="gerarSensi('arma','AC80')">AC80 🎯</button>
+    </div>
+    <div id="resultadoArma" style="margin-top:20px; min-height:120px;"></div>
+  </div>
 
-<label>Potência do Celular</label><br>
-<select id="potencia">
-  <option value="baixa">Baixa</option>
-  <option value="media">Média</option>
-  <option value="alta">Alta</option>
-</select>
-<br><br>
+  <!-- DPI -->
+  <div id="dpi" class="tabContent">
+    <h3>Calculador Inteligente de DPI</h3>
+    <label>Sensi Geral</label><br>
+    <input type="number" id="sensiDPI" placeholder="Ex: 150">
+    <br><br>
+    <button onclick="calcularDPI()">Calcular DPI</button>
+    <div id="resultadoDPI" style="margin-top:20px;"></div>
+  </div>
 
-<button onclick="gerarSensi()">Gerar Sensibilidade</button>
-<div id="resultadoSensi" style="margin-top:20px; min-height:120px;"></div>
+  <!-- CICLOS IPHONE -->
+  <div id="ciclos" class="tabContent">
+    <h3>Calculador de Ciclos para iPhone 🍎</h3>
+    <label>DPI</label><br>
+    <input type="number" id="cicloIphone" placeholder="Ex: 800">
+    <label>Sensi</label><br>
+    <input type="number" id="sensiIphone" placeholder="Ex: 150">
+    <br><br>
+    <button onclick="calcularCiclos()">Calcular Ciclos</button>
+    <div id="resultadoCiclos" style="margin-top:20px;"></div>
+  </div>
 
-<h3>Histórico</h3>
-<div id="historicoSensi" style="background:#111; padding:10px; border-radius:10px; max-height:150px; overflow:auto;"></div>
-
-<h3>Ranking de Sensi</h3>
-<div id="ranking" style="background:#111; padding:10px; border-radius:10px; max-height:150px; overflow:auto;"></div>
+  <!-- MINHA REDE -->
+  <div id="rede" class="tabContent">
+    <h3>❤️ Siga @diggo_vini07</h3>
+    <p>Instagram: <a href="https://instagram.com/diggo_vini07" target="_blank">@krazy</a></p>
+    <p>Discord: <a href="#" target="_blank">Krazy Server</a></p>
+  </div>
 </div>
 
 <!-- PAINEL ADM -->
@@ -115,144 +110,6 @@ input, select{
   </div>
 </div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-// 🔑 Config Firebase
-const firebaseConfig = {
-  apiKey: "AIzaSyCeGBR2ek8GlvMIWdQWzCpNI-eDaI_enV0",
-  authDomain: "krazy-sensi-ia.firebaseapp.com",
-  projectId: "krazy-sensi-ia",
-  storageBucket: "krazy-sensi-ia.firebasestorage.app",
-  messagingSenderId: "457003498171",
-  appId: "1:457003498171:web:58b73386b10e9d073ec79e"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-// Variáveis globais para histórico
-let usuarioAtual = "";
-
-// ======== FUNÇÕES ========
-
-// GERAR KEY ADM
-async function gerarKey(){
-  const diasInput = document.getElementById("dias").value.trim();
-  const permanente = diasInput.toLowerCase() === "permanente";
-  if(!permanente && (isNaN(diasInput) || diasInput<=0)){ alert("Digite número válido ou 'permanente'"); return;}
-  const novaKey = "KZ-"+Math.random().toString(36).substring(2,10).toUpperCase();
-  await setDoc(doc(db,"keys",novaKey),{
-    ativa:true,
-    criadaEm:Date.now(),
-    duracaoDias:permanente?0:parseInt(diasInput),
-    permanente:permanente
-  });
-  document.getElementById("keyGerada").innerText = novaKey;
-  document.getElementById("boxKey").style.display="block";
-}
-
-// VALIDAR KEY
-async function validarKey(){
-  const key = document.getElementById("inputKey").value.trim().toUpperCase();
-  const ref = doc(db,"keys",key);
-  const snap = await getDoc(ref);
-  if(!snap.exists()){ document.getElementById("status").innerText="Key inválida ❌"; return;}
-  const dados = snap.data();
-  if(!dados.ativa){ document.getElementById("status").innerText="Key desativada ❌"; return;}
-  if(!dados.permanente){
-    const agora=Date.now();
-    const expiraEm=dados.criadaEm+(dados.duracaoDias*86400000);
-    if(agora>expiraEm){ document.getElementById("status").innerText="Key expirada ❌"; return;}
-  }
-  usuarioAtual = key; // Salva usuário atual
-  document.getElementById("loginArea").style.display="none";
-  document.getElementById("geradorArea").style.display="block";
-}
-
-// COPIAR KEY
-function copiarKey(){
-  const texto=document.getElementById("keyGerada").innerText;
-  navigator.clipboard.writeText(texto);
-  document.getElementById("copiadoMsg").innerText="Copiado ✅";
-  setTimeout(()=>{ document.getElementById("copiadoMsg").innerText=""; },2000);
-}
-
-// ======== GERADOR SENSI IA + HISTÓRICO + RANKING ========
-async function gerarSensi(){
-  const marca=document.getElementById("marca").value;
-  const modelo=document.getElementById("modelo").value.trim();
-  const potencia=document.getElementById("potencia").value;
-
-  let minGeral,maxGeral;
-  if(potencia==="baixa"){ minGeral=40; maxGeral=120;}
-  if(potencia==="media"){ minGeral=80; maxGeral=160;}
-  if(potencia==="alta"){ minGeral=120; maxGeral=200;}
-
-  const geral=Math.floor(minGeral + (Math.random()**1.5)*(maxGeral-minGeral));
-  const redDot=Math.floor(geral*(1+(Math.random()-0.5)*0.1));
-  const x2=Math.floor(geral*(1+(Math.random()-0.5)*0.15));
-  const x4=Math.floor(geral*(1+(Math.random()-0.5)*0.2));
-  const awm=Math.floor(geral*(0.7+Math.random()*0.15));
-  let dpi=Math.floor(960-(geral/200)*560 + (Math.random()-0.5)*50);
-  if(dpi>960)dpi=960; if(dpi<400)dpi=400;
-
-  const resultado=document.getElementById("resultadoSensi");
-  resultado.innerHTML="";
-  const texto=`Marca: ${marca}\nModelo: ${modelo}\nGeral: ${geral}\nRed Dot: ${redDot}\n2x: ${x2}\n4x: ${x4}\nAWM: ${awm}\nDPI: ${dpi}`;
-
-  // efeito digitação IA
-  let i=0;
-  const interval=setInterval(()=>{
-    resultado.innerHTML=textToHtml(texto.slice(0,i));
-    i++;
-    if(i>texto.length) clearInterval(interval);
-  },20);
-
-  function textToHtml(txt){ return txt.replace(/\n/g,"<br>"); }
-
-  // SALVAR HISTÓRICO DO USUARIO
-  const histRef = doc(db,"usuarios",usuarioAtual);
-  await setDoc(histRef, {sensis: arrayUnion({marca, modelo, geral, redDot, x2, x4, awm, dpi, criadoEm:Date.now()})}, {merge:true});
-
-  // ATUALIZAR RANKING GLOBAL (apenas geral)
-  const rankRef = doc(db,"ranking","global");
-  await setDoc(rankRef, {sensis: arrayUnion({usuario:usuarioAtual, geral, criadoEm:Date.now()})}, {merge:true});
-
-  // CARREGAR HISTÓRICO
-  const snap = await getDoc(histRef);
-  const histDiv = document.getElementById("historicoSensi");
-  histDiv.innerHTML = "";
-  snap.data().sensis.reverse().forEach(s=>{
-    histDiv.innerHTML += `Geral: ${s.geral} | DPI: ${s.dpi} | Modelo: ${s.modelo}<br>`;
-  });
-
-  // CARREGAR RANKING
-  const rankSnap = await getDoc(rankRef);
-  const rankDiv = document.getElementById("ranking");
-  rankDiv.innerHTML = "";
-  const ranks = rankSnap.data().sensis.sort((a,b)=>b.geral-a.geral).slice(0,10);
-  ranks.forEach(r=>{
-    rankDiv.innerHTML += `User: ${r.usuario} | Geral: ${r.geral}<br>`;
-  });
-}
-
-// ======== DESBLOQUEIO ADM COM 7777 ========
-let seq="";
-document.addEventListener("keydown",e=>{
-  if(e.key==="7") seq+="7"; else seq="";
-  if(seq==="7777"){
-    const adm=document.getElementById("admPanel");
-    adm.style.display=(adm.style.display==="none")?"block":"none";
-    seq="";
-  }
-});
-
-window.validarKey=validarKey;
-window.gerarSensi=gerarSensi;
-window.gerarKey=gerarKey;
-window.copiarKey=copiarKey;
-</script>
+<script src="script.js" type="module"></script>
 </body>
-  </html>
+      </html>
