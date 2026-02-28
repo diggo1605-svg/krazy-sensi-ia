@@ -11,9 +11,8 @@
 
 <!-- LOGIN -->
 <div id="loginArea" class="card">
-  <h3>Digite sua Key</h3>
+  <h2>Digite sua Key</h2>
   <input type="text" id="inputKey" placeholder="KZ-XXXXXXX">
-  <br>
   <button onclick="validarKey()">Entrar</button>
   <p id="status"></p>
 </div>
@@ -50,7 +49,7 @@
     </select>
     <br><br>
     <button onclick="gerarSensi('celular')">Gerar Sensibilidade</button>
-    <div id="resultadoSensi" style="margin-top:20px; min-height:120px;"></div>
+    <div id="resultadoSensi"></div>
   </div>
 
   <!-- ARMA -->
@@ -64,7 +63,7 @@
       <button onclick="gerarSensi('arma','Carapina')">Carapina 🎯</button>
       <button onclick="gerarSensi('arma','AC80')">AC80 🎯</button>
     </div>
-    <div id="resultadoArma" style="margin-top:20px; min-height:120px;"></div>
+    <div id="resultadoArma"></div>
   </div>
 
   <!-- DPI -->
@@ -72,27 +71,25 @@
     <h3>Calculador Inteligente de DPI</h3>
     <label>Sensi Geral</label><br>
     <input type="number" id="sensiDPI" placeholder="Ex: 150">
-    <br><br>
     <button onclick="calcularDPI()">Calcular DPI</button>
-    <div id="resultadoDPI" style="margin-top:20px;"></div>
+    <div id="resultadoDPI"></div>
   </div>
 
   <!-- CICLOS IPHONE -->
   <div id="ciclos" class="tabContent">
-    <h3>Calculador de Ciclos para iPhone 🍎</h3>
+    <h3>Calculador de Ciclos iPhone 🍎</h3>
     <label>DPI</label><br>
-    <input type="number" id="cicloIphone" placeholder="Ex: 800">
+    <input type="number" id="dpiIphone" placeholder="Ex: 800">
     <label>Sensi</label><br>
     <input type="number" id="sensiIphone" placeholder="Ex: 150">
-    <br><br>
     <button onclick="calcularCiclos()">Calcular Ciclos</button>
-    <div id="resultadoCiclos" style="margin-top:20px;"></div>
+    <div id="resultadoCiclos"></div>
   </div>
 
-  <!-- MINHA REDE -->
+  <!-- REDES -->
   <div id="rede" class="tabContent">
     <h3>❤️ Siga @diggo_vini07</h3>
-    <p>Instagram: <a href="https://instagram.com/diggo_vini07" target="_blank">@krazy</a></p>
+    <p>Instagram: <a href="https://instagram.com/krazy" target="_blank">@diggo_vini07</a></p>
     <p>Discord: <a href="#" target="_blank">Krazy Server</a></p>
   </div>
 </div>
@@ -101,9 +98,8 @@
 <div id="admPanel" class="card">
   <h3>Painel ADM</h3>
   <input type="text" id="dias" placeholder="Dias ou permanente">
-  <br>
   <button onclick="gerarKey()">Gerar Key</button>
-  <div id="boxKey" style="display:none;margin-top:15px;">
+  <div id="boxKey" style="display:none;">
     <h3 id="keyGerada"></h3>
     <button onclick="copiarKey()">📋 Copiar</button>
     <p id="copiadoMsg"></p>
@@ -112,4 +108,4 @@
 
 <script src="script.js" type="module"></script>
 </body>
-      </html>
+  </html>
