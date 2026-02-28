@@ -1,1 +1,58 @@
-
+body{
+  background:#0a0a0a;
+  color:white;
+  font-family:Arial, sans-serif;
+  text-align:center;
+  overflow-x:hidden;
+}
+h1{cursor:pointer;}
+button{
+  padding:12px 25px;
+  background:#8000ff;
+  border:none;
+  color:white;
+  cursor:pointer;
+  margin:10px 5px;
+  transition:0.2s, box-shadow 0.3s;
+  box-shadow:0 0 10px #8000ff;
+  border-radius:8px;
+  font-weight:bold;
+  font-size:14px;
+}
+button:active{
+  transform:scale(0.95);
+  filter:brightness(70%);
+  box-shadow:0 0 20px #bb00ff;
+}
+button:hover{
+  box-shadow:0 0 20px #bb00ff;
+}
+input, select{
+  padding:10px;
+  margin-top:10px;
+  border-radius:5px;
+  border:none;
+}
+.card{
+  background:#111;
+  padding:25px;
+  margin:20px auto;
+  width:400px;
+  border:1px solid #8000ff;
+  box-shadow:0 0 15px #8000ff;
+  border-radius:12px;
+  animation:fade 0.4s ease-in-out;
+  transition:0.3s;
+}
+.card:hover{
+  box-shadow:0 0 25px #bb00ff;
+}
+@keyframes fade{
+  from{opacity:0;transform:translateY(10px);}
+  to{opacity:1;transform:translateY(0);}
+}
+#admPanel{ display:none; width:400px;}
+#tabs button{margin:0 5px;}
+.tabContent{display:none;}
+.activeTab{display:block;}
+#loading{color:#bb00ff;font-weight:bold;font-size:18px;}
