@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Krazy Sensi .IA</title>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCeGBR2ek8GlvMIWdQWzCpNI-eDaI_enV0",
+      authDomain: "krazy-sensi-ia.firebaseapp.com",
+      projectId: "krazy-sensi-ia",
+      storageBucket: "krazy-sensi-ia.firebasestorage.app",
+      messagingSenderId: "457003498171",
+      appId: "1:457003498171:web:58b73386b10e9d073ec79e"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function validarKey() {
+      const keyDigitada = document.getElementById("key").value;
+      const docRef = doc(db, "keys", keyDigitada);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        alert("Key válida 🔥");
+      } else {
+        alert("Key inválida ❌");
+      }
+    }
+
+    window.validarKey = validarKey;
+  </script>
+
+</head>
+
+<body style="background:black;color:purple;text-align:center;font-family:Arial">
+
+  <h1>Krazy Sensi .IA</h1>
+
+  <input type="text" id="key" placeholder="Digite sua Key">
+  <br><br>
+  <button onclick="validarKey()">Entrar</button>
+
+</body>
+</html>
