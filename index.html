@@ -4,110 +4,210 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Krazy Sensi .IA</title>
-<link rel="stylesheet" href="style.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Orbitron',sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#0f0014,#1f0026,#2b0036);
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+min-height:100vh;
+overflow-x:hidden;
+}
+
+.hidden{display:none;}
+
+h1{
+margin:20px 0;
+font-size:28px;
+text-align:center;
+text-shadow:0 0 15px #bb00ff;
+cursor:pointer;
+}
+
+.card{
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(15px);
+padding:20px;
+margin:15px 0;
+border-radius:20px;
+width:90%;
+max-width:500px;
+box-shadow:0 0 25px #bb00ff;
+transition:0.4s;
+}
+
+.card:hover{
+box-shadow:0 0 45px #ff00ff;
+}
+
+input,select,button{
+padding:10px;
+margin:6px 0;
+border-radius:10px;
+border:none;
+outline:none;
+font-size:14px;
+}
+
+button{
+background:linear-gradient(45deg,#bb00ff,#ff00ff);
+color:white;
+cursor:pointer;
+box-shadow:0 0 15px #bb00ff;
+transition:0.3s;
+}
+
+button:hover{
+filter:brightness(1.2);
+}
+
+button:active{
+transform:scale(0.95);
+}
+
+#loading{
+display:none;
+margin-top:10px;
+color:#ff00ff;
+animation:pulse 1s infinite;
+}
+
+@keyframes pulse{
+0%{opacity:0.3;}
+50%{opacity:1;}
+100%{opacity:0.3;}
+}
+</style>
 </head>
+
 <body>
 
-<!-- Tela de Login -->
-<div id="loginScreen" class="screen">
-    <h1>Krazy Sensi .IA</h1>
-    <input type="text" id="userKey" placeholder="Digite sua Key">
-    <button onclick="validarKey()">Entrar</button>
+<div id="loginScreen">
+<h1>Krazy Sensi .IA</h1>
+<input id="userKey" placeholder="Digite sua Key">
+<br>
+<button onclick="validarKey()">Entrar</button>
 </div>
 
-<!-- Tela Principal -->
-<div id="mainScreen" class="screen hidden">
+<div id="mainScreen" class="hidden">
 
-    <h1 id="tituloApp">Krazy Sensi .IA</h1>
+<h1 id="titulo">Krazy Sensi .IA</h1>
 
-    <div id="tabs" class="card">
-        <button onclick="abrirTab('celular')">Sensi por Celular 📱</button>
-        <button onclick="abrirTab('arma')">Sensi por Arma 🎯</button>
-        <button onclick="abrirTab('dpi')">Calculador de DPI 🍏</button>
-        <button onclick="abrirTab('famosos')">Sensis de Famosos ⭐</button>
-        <button onclick="abrirTab('minhas')">Minhas Sensis ❤️</button>
-        <button onclick="abrirTab('redes')">Redes Sociais 🔗</button>
-    </div>
+<div class="card">
+<h3>Gerar Sensi</h3>
 
-    <div id="loading">IA processando...</div>
-    <div id="boxKey" class="card"></div>
+<select id="modo">
+<option value="balanceada">Balanceada</option>
+<option value="maisControle">Mais Controle</option>
+<option value="muitoRapida">Muito Rápida</option>
+<option value="maisCapa">Mais Capa</option>
+</select>
 
-    <!-- Abas -->
-    <div id="celular" class="tabContent card">
-        <h3>Gerar Sensi por Celular</h3>
-        <input type="text" id="marcaCelular" placeholder="Digite a marca">
-        <input type="text" id="modeloCelular" placeholder="Digite o modelo">
-        <select id="modoCelular">
-            <option value="balanceada">Balanceada</option>
-            <option value="maisControle">Mais Controle</option>
-            <option value="muitoRapida">Muito Rápida</option>
-            <option value="maisCapa">Mais Capa</option>
-        </select>
-        <button onclick="gerarSensi('celular')">Gerar Sensi</button>
-    </div>
+<br>
+<button onclick="gerarSensi()">Gerar Sensi</button>
 
-    <div id="arma" class="tabContent card">
-        <h3>Gerar Sensi por Arma</h3>
-        <select id="tipoArma">
-            <option>UMP</option>
-            <option>XM8</option>
-            <option>Desert</option>
-            <option>M1014</option>
-            <option>Carapina</option>
-            <option>AC80</option>
-        </select>
-        <select id="modoArma">
-            <option value="balanceado">Balanceado</option>
-            <option value="controle">Controle</option>
-            <option value="rapido">Rápido</option>
-        </select>
-        <button onclick="gerarSensi('arma')">Gerar Sensi</button>
-    </div>
+<div id="loading">IA processando...</div>
 
-    <div id="dpi" class="tabContent card">
-        <h3>Calculador de DPI Inteligente</h3>
-        <button onclick="gerarSensi('dpi')">Calcular DPI</button>
-    </div>
+<div id="resultado"></div>
 
-    <div id="famosos" class="tabContent card">
-        <h3>Sensis de Famosos</h3>
-        <select id="jogadorFamoso">
-            <option>ApelaPato</option>
-            <option>Marechal</option>
-            <option>Two9</option>
-            <option>Nobru</option>
-            <option>Freitas</option>
-            <option>Cerol</option>
-            <option>Fantasma</option>
-            <option>White444</option>
-        </select>
-        <button onclick="gerarSensi('famoso')">Gerar Sensi</button>
-    </div>
-
-    <div id="minhas" class="tabContent card">
-        <h3>Minhas Sensis Salvas</h3>
-        <div id="sensisSalvas"></div>
-    </div>
-
-    <div id="redes" class="tabContent card">
-        <h3>Redes Sociais</h3>
-        <p>Siga: <a href="https://instagram.com/seuusuario" target="_blank">@seuusuario</a></p>
-    </div>
-
-    <!-- Painel ADM -->
-    <div id="admPanel" class="card">
-        <h3>Painel ADM</h3>
-        <button onclick="gerarKey()">Gerar Key Aleatória</button>
-    </div>
 </div>
 
-<script src="script.js"></script>
+<div class="card">
+<h3>Minhas Sensis ❤️</h3>
+<div id="salvas"></div>
+</div>
+
+<div id="admPanel" class="card hidden">
+<h3>Painel ADM</h3>
+<button onclick="gerarKey()">Gerar Key</button>
+</div>
+
+</div>
+
 <script>
-function abrirTab(tabName) {
-    document.querySelectorAll('.tabContent').forEach(tab => tab.classList.remove('activeTab'));
-    document.getElementById(tabName).classList.add('activeTab');
+let validKeys=["KRAZY123"];
+let saved=[];
+let clickCount=0;
+
+function validarKey(){
+let key=document.getElementById("userKey").value;
+if(validKeys.includes(key)){
+document.getElementById("loginScreen").classList.add("hidden");
+document.getElementById("mainScreen").classList.remove("hidden");
+}else{
+alert("Key inválida");
 }
-abrirTab('celular');
+}
+
+document.getElementById("titulo").addEventListener("click",()=>{
+clickCount++;
+if(clickCount>=7){
+let senha=prompt("Senha ADM:");
+if(senha==="krazyadm071110"){
+document.getElementById("admPanel").classList.remove("hidden");
+}
+clickCount=0;
+}
+});
+
+function gerarSensi(){
+document.getElementById("loading").style.display="block";
+
+setTimeout(()=>{
+
+let modo=document.getElementById("modo").value;
+let geral;
+
+if(modo==="balanceada") geral=Math.floor(Math.random()*30)+130;
+if(modo==="maisControle") geral=Math.floor(Math.random()*20)+100;
+if(modo==="muitoRapida") geral=Math.floor(Math.random()*15)+185;
+if(modo==="maisCapa") geral=Math.floor(Math.random()*20)+160;
+
+let red=Math.round(geral*0.88);
+let x2=Math.round(geral*0.97);
+let x4=Math.round(geral*1.03);
+let awm=Math.round(geral*0.92);
+
+let card=`
+<div class="card">
+<p>Geral: <b>${geral}</b></p>
+<p>Red Dot: <b>${red}</b></p>
+<p>2x: <b>${x2}</b></p>
+<p>4x: <b>${x4}</b></p>
+<p>AWM/Olhadinha: <b>${awm}</b></p>
+<button onclick="salvar(this.parentElement)">❤️ Salvar</button>
+</div>
+`;
+
+document.getElementById("resultado").innerHTML=card;
+document.getElementById("loading").style.display="none";
+
+},1000);
+}
+
+function salvar(card){
+saved.push(card.innerHTML);
+document.getElementById("salvas").innerHTML=saved.map(s=>`<div class="card">${s}</div>`).join("");
+}
+
+function gerarKey(){
+let key="KRAZY"+Math.floor(Math.random()*900+100);
+validKeys.push(key);
+alert("Nova Key: "+key);
+}
 </script>
+
 </body>
     </html>
