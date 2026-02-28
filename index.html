@@ -8,7 +8,7 @@
     import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
-      apiKey: "AIzaSyCeGBR2ek8GlvMIWdQWzCpNI-eDaI_enV0",
+      apiKey: "SUA_API_KEY_AQUI",
       authDomain: "krazy-sensi-ia.firebaseapp.com",
       projectId: "krazy-sensi-ia",
       storageBucket: "krazy-sensi-ia.firebasestorage.app",
@@ -19,8 +19,19 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const SENHA_ADM = "krazy123";
+    const SENHA_ADM = "Kz@2026ADM!#9";
 
+    // 🔐 Abrir ADM
+    function abrirADM() {
+      const senha = prompt("Digite senha ADM:");
+      if (senha === SENHA_ADM) {
+        document.getElementById("painelADM").style.display = "block";
+      } else {
+        alert("Senha incorreta ❌");
+      }
+    }
+
+    // 🔥 Gerar Key
     async function gerarKey() {
       const diasInput = document.getElementById("dias").value;
       const permanente = diasInput.toLowerCase() === "permanente";
@@ -39,9 +50,33 @@
         permanente: permanente
       });
 
-      alert("Key criada: " + novaKey);
+      animarKey(novaKey);
+      document.getElementById("boxKey").style.display = "block";
     }
 
+    // ✨ Animação digitando
+    function animarKey(texto) {
+      const elemento = document.getElementById("keyGerada");
+      elemento.innerText = "";
+      let i = 0;
+
+      const intervalo = setInterval(() => {
+        elemento.innerText += texto[i];
+        i++;
+        if (i >= texto.length) clearInterval(intervalo);
+      }, 80);
+    }
+
+    // 📋 Copiar
+    function copiarKey() {
+      const texto = document.getElementById("keyGerada").innerText;
+      navigator.clipboard.writeText(texto);
+      const msg = document.getElementById("copiadoMsg");
+      msg.innerText = "Copiado ✅";
+      setTimeout(() => msg.innerText = "", 2000);
+    }
+
+    // 🔎 Validar
     async function validarKey() {
       const keyDigitada = document.getElementById("key").value;
       const docRef = doc(db, "keys", keyDigitada);
@@ -61,7 +96,7 @@
 
       if (!dados.permanente) {
         const agora = Date.now();
-        const tempoTotal = dados.duracaoDias * 24 * 60 * 60 * 1000;
+        const tempoTotal = dados.duracaoDias * 86400000;
 
         if (agora - dados.criadaEm > tempoTotal) {
           await updateDoc(docRef, { ativa: false });
@@ -70,7 +105,8 @@
         }
 
         const restante = tempoTotal - (agora - dados.criadaEm);
-        const diasRestantes = Math.ceil(restante / (24*60*60*1000));
+        const diasRestantes = Math.ceil(restante / 86400000);
+
         document.getElementById("contador").innerText =
           "Dias restantes: " + diasRestantes;
       } else {
@@ -81,18 +117,10 @@
       alert("Key válida 🔥");
     }
 
-    function abrirADM() {
-      const senha = prompt("Digite senha ADM:");
-      if (senha === SENHA_ADM) {
-        document.getElementById("painelADM").style.display = "block";
-      } else {
-        alert("Senha incorreta ❌");
-      }
-    }
-
     window.validarKey = validarKey;
     window.gerarKey = gerarKey;
     window.abrirADM = abrirADM;
+    window.copiarKey = copiarKey;
   </script>
 
   <style>
@@ -128,6 +156,7 @@
       font-weight: bold;
       cursor: pointer;
       transition: 0.2s;
+      margin: 5px;
     }
 
     button:hover {
@@ -143,6 +172,18 @@
       display: none;
       margin-top: 30px;
     }
+
+    #boxKey {
+      display: none;
+      margin-top: 20px;
+    }
+
+    .neonBox {
+      padding: 15px;
+      border: 2px solid #b300ff;
+      background: black;
+      box-shadow: 0 0 20px #b300ff;
+    }
   </style>
 </head>
 
@@ -151,10 +192,8 @@
   <h1>Krazy Sensi .IA</h1>
 
   <h3>Login Cliente</h3>
-
   <input type="text" id="key" placeholder="Digite sua Key">
   <br><br>
-
   <button onclick="validarKey()">Entrar</button>
 
   <p id="contador"></p>
@@ -165,13 +204,18 @@
 
   <div id="painelADM">
     <h3>Painel ADM</h3>
-
-    <input type="text" id="dias"
-    placeholder="Digite dias ou 'permanente'">
+    <input type="text" id="dias" placeholder="Digite dias ou 'permanente'">
     <br><br>
-
     <button onclick="gerarKey()">Gerar Key</button>
+
+    <div id="boxKey">
+      <div class="neonBox">
+        <h3 id="keyGerada" style="letter-spacing:2px;"></h3>
+        <button onclick="copiarKey()">📋 Copiar</button>
+        <p id="copiadoMsg"></p>
+      </div>
+    </div>
   </div>
 
 </body>
-  </html>
+</html>
