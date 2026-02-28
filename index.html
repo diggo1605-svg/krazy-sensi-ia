@@ -5,7 +5,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCeGBR2ek8GlvMIWdQWzCpNI-eDaI_enV0",
@@ -19,30 +19,159 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
+    const SENHA_ADM = "krazy123";
+
+    async function gerarKey() {
+      const diasInput = document.getElementById("dias").value;
+      const permanente = diasInput.toLowerCase() === "permanente";
+
+      if (!permanente && (isNaN(diasInput) || diasInput <= 0)) {
+        alert("Digite número válido ou 'permanente'");
+        return;
+      }
+
+      const novaKey = "KZ-" + Math.random().toString(36).substring(2,10).toUpperCase();
+
+      await setDoc(doc(db, "keys", novaKey), {
+        ativa: true,
+        criadaEm: Date.now(),
+        duracaoDias: permanente ? 0 : parseInt(diasInput),
+        permanente: permanente
+      });
+
+      alert("Key criada: " + novaKey);
+    }
+
     async function validarKey() {
       const keyDigitada = document.getElementById("key").value;
       const docRef = doc(db, "keys", keyDigitada);
       const docSnap = await getDoc(docRef);
 
-      if (docSnap.exists()) {
-        alert("Key válida 🔥");
-      } else {
+      if (!docSnap.exists()) {
         alert("Key inválida ❌");
+        return;
+      }
+
+      const dados = docSnap.data();
+
+      if (!dados.ativa) {
+        alert("Key desativada ❌");
+        return;
+      }
+
+      if (!dados.permanente) {
+        const agora = Date.now();
+        const tempoTotal = dados.duracaoDias * 24 * 60 * 60 * 1000;
+
+        if (agora - dados.criadaEm > tempoTotal) {
+          await updateDoc(docRef, { ativa: false });
+          alert("Key expirada ⛔");
+          return;
+        }
+
+        const restante = tempoTotal - (agora - dados.criadaEm);
+        const diasRestantes = Math.ceil(restante / (24*60*60*1000));
+        document.getElementById("contador").innerText =
+          "Dias restantes: " + diasRestantes;
+      } else {
+        document.getElementById("contador").innerText =
+          "Key Permanente ♾️";
+      }
+
+      alert("Key válida 🔥");
+    }
+
+    function abrirADM() {
+      const senha = prompt("Digite senha ADM:");
+      if (senha === SENHA_ADM) {
+        document.getElementById("painelADM").style.display = "block";
+      } else {
+        alert("Senha incorreta ❌");
       }
     }
 
     window.validarKey = validarKey;
+    window.gerarKey = gerarKey;
+    window.abrirADM = abrirADM;
   </script>
 
+  <style>
+    body {
+      background: black;
+      color: #b300ff;
+      text-align: center;
+      font-family: Arial;
+    }
+
+    h1 {
+      text-shadow: 0 0 20px #b300ff;
+      animation: glow 1.5s infinite alternate;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #b300ff; }
+      to { text-shadow: 0 0 30px #ff00ff; }
+    }
+
+    input {
+      padding: 10px;
+      border: 2px solid #b300ff;
+      background: black;
+      color: white;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: #b300ff;
+      border: none;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: #9900cc;
+    }
+
+    button:active {
+      background: #660099;
+      transform: scale(0.95);
+    }
+
+    #painelADM {
+      display: none;
+      margin-top: 30px;
+    }
+  </style>
 </head>
 
-<body style="background:black;color:purple;text-align:center;font-family:Arial">
+<body>
 
   <h1>Krazy Sensi .IA</h1>
 
+  <h3>Login Cliente</h3>
+
   <input type="text" id="key" placeholder="Digite sua Key">
   <br><br>
+
   <button onclick="validarKey()">Entrar</button>
 
+  <p id="contador"></p>
+
+  <hr style="margin:40px;border-color:#b300ff;">
+
+  <button onclick="abrirADM()">Abrir Painel ADM</button>
+
+  <div id="painelADM">
+    <h3>Painel ADM</h3>
+
+    <input type="text" id="dias"
+    placeholder="Digite dias ou 'permanente'">
+    <br><br>
+
+    <button onclick="gerarKey()">Gerar Key</button>
+  </div>
+
 </body>
-</html>
+  </html>
