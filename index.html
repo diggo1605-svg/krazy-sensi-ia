@@ -1,212 +1,236 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Krazy Sensi .IA</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+<title>KRAZY SENSI.IA</title>
 
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Orbitron',sans-serif;
-}
-
 body{
-background:linear-gradient(135deg,#0f0014,#1f0026,#2b0036);
+margin:0;
+font-family:Arial;
+background:linear-gradient(180deg,#0a0014,#000);
 color:white;
-display:flex;
-justify-content:center;
-align-items:center;
-flex-direction:column;
-min-height:100vh;
-overflow-x:hidden;
+text-align:center;
 }
 
-.hidden{display:none;}
-
-h1{
-margin:20px 0;
-font-size:28px;
-text-align:center;
-text-shadow:0 0 15px #bb00ff;
+.title{
+font-size:34px;
+margin-top:20px;
+color:#c300ff;
+text-shadow:0 0 20px #c300ff;
 cursor:pointer;
 }
 
-.card{
-background:rgba(255,255,255,0.05);
-backdrop-filter:blur(15px);
+.box{
+background:#111;
+margin:20px;
 padding:20px;
-margin:15px 0;
-border-radius:20px;
+border-radius:15px;
+box-shadow:0 0 20px #c300ff55;
+}
+
+input,select{
 width:90%;
-max-width:500px;
-box-shadow:0 0 25px #bb00ff;
-transition:0.4s;
-}
-
-.card:hover{
-box-shadow:0 0 45px #ff00ff;
-}
-
-input,select,button{
-padding:10px;
-margin:6px 0;
-border-radius:10px;
+padding:12px;
+margin:10px;
 border:none;
-outline:none;
-font-size:14px;
+border-radius:10px;
+background:#1a1a1a;
+color:white;
 }
 
 button{
-background:linear-gradient(45deg,#bb00ff,#ff00ff);
+padding:12px 20px;
+border:none;
+border-radius:12px;
+background:#c300ff;
 color:white;
+font-weight:bold;
 cursor:pointer;
-box-shadow:0 0 15px #bb00ff;
-transition:0.3s;
-}
-
-button:hover{
-filter:brightness(1.2);
+transition:0.2s;
 }
 
 button:active{
 transform:scale(0.95);
+background:#8a00b3;
 }
 
-#loading{
-display:none;
+.hidden{display:none;}
+
+.result{
+margin-top:15px;
+background:#000;
+padding:15px;
+border-radius:10px;
+box-shadow:0 0 15px #c300ff;
+}
+
+.save{
+background:#00c853;
 margin-top:10px;
-color:#ff00ff;
-animation:pulse 1s infinite;
 }
 
-@keyframes pulse{
-0%{opacity:0.3;}
-50%{opacity:1;}
-100%{opacity:0.3;}
+.copy{
+background:#2962ff;
+margin-top:10px;
 }
+
 </style>
 </head>
 
 <body>
 
-<div id="loginScreen">
-<h1>Krazy Sensi .IA</h1>
-<input id="userKey" placeholder="Digite sua Key">
-<br>
-<button onclick="validarKey()">Entrar</button>
+<div class="title" onclick="clickTitulo()">KRAZY SENSI.IA</div>
+
+<!-- LOGIN -->
+<div class="box" id="loginBox">
+<h3>Digite sua Key</h3>
+<input id="keyInput">
+<button onclick="login()">ENTRAR</button>
+<p id="msg"></p>
 </div>
 
-<div id="mainScreen" class="hidden">
-
-<h1 id="titulo">Krazy Sensi .IA</h1>
-
-<div class="card">
-<h3>Gerar Sensi</h3>
+<!-- GERADOR -->
+<div class="box hidden" id="geradorBox">
 
 <select id="modo">
-<option value="balanceada">Balanceada</option>
-<option value="maisControle">Mais Controle</option>
-<option value="muitoRapida">Muito Rápida</option>
-<option value="maisCapa">Mais Capa</option>
+<option value="controle">Mais Controle</option>
+<option value="balanceado">Balanceado</option>
+<option value="rapido">Muito Rápida</option>
 </select>
 
+<button onclick="gerar()">GERAR SENSI</button>
+
+<div id="resultado" class="result hidden"></div>
+
+<button class="save hidden" id="saveBtn" onclick="salvar()">SALVAR ⭐</button>
+<button class="copy hidden" id="copyBtn" onclick="copiar()">COPIAR 📋</button>
+
+</div>
+
+<!-- ADM -->
+<div class="box hidden" id="admBox">
+<h3>PAINEL ADM</h3>
+
+<input id="senhaAdm" placeholder="Senha">
+<button onclick="entrarAdm()">Entrar</button>
+
+<div id="admArea" class="hidden">
 <br>
-<button onclick="gerarSensi()">Gerar Sensi</button>
+<button onclick="gerarNovaKey()">GERAR NOVA KEY</button>
+<button onclick="resetarKey()">RESETAR KEY</button>
 
-<div id="loading">IA processando...</div>
-
-<div id="resultado"></div>
-
+<p id="keyGerada"></p>
 </div>
-
-<div class="card">
-<h3>Minhas Sensis ❤️</h3>
-<div id="salvas"></div>
-</div>
-
-<div id="admPanel" class="card hidden">
-<h3>Painel ADM</h3>
-<button onclick="gerarKey()">Gerar Key</button>
-</div>
-
 </div>
 
 <script>
-let validKeys=["KRAZY123"];
-let saved=[];
-let clickCount=0;
 
-function validarKey(){
-let key=document.getElementById("userKey").value;
-if(validKeys.includes(key)){
-document.getElementById("loginScreen").classList.add("hidden");
-document.getElementById("mainScreen").classList.remove("hidden");
+let KEY = localStorage.getItem("key") || "KRAZY123"
+let clicks = 0
+let ultimaSensi = ""
+
+// LOGIN
+function login(){
+let k = document.getElementById("keyInput").value
+
+if(k === KEY){
+localStorage.setItem("logado","1")
+mostrar()
 }else{
-alert("Key inválida");
+document.getElementById("msg").innerHTML="Key inválida"
 }
 }
 
-document.getElementById("titulo").addEventListener("click",()=>{
-clickCount++;
-if(clickCount>=7){
-let senha=prompt("Senha ADM:");
-if(senha==="krazyadm071110"){
-document.getElementById("admPanel").classList.remove("hidden");
-}
-clickCount=0;
-}
-});
-
-function gerarSensi(){
-document.getElementById("loading").style.display="block";
-
-setTimeout(()=>{
-
-let modo=document.getElementById("modo").value;
-let geral;
-
-if(modo==="balanceada") geral=Math.floor(Math.random()*30)+130;
-if(modo==="maisControle") geral=Math.floor(Math.random()*20)+100;
-if(modo==="muitoRapida") geral=Math.floor(Math.random()*15)+185;
-if(modo==="maisCapa") geral=Math.floor(Math.random()*20)+160;
-
-let red=Math.round(geral*0.88);
-let x2=Math.round(geral*0.97);
-let x4=Math.round(geral*1.03);
-let awm=Math.round(geral*0.92);
-
-let card=`
-<div class="card">
-<p>Geral: <b>${geral}</b></p>
-<p>Red Dot: <b>${red}</b></p>
-<p>2x: <b>${x2}</b></p>
-<p>4x: <b>${x4}</b></p>
-<p>AWM/Olhadinha: <b>${awm}</b></p>
-<button onclick="salvar(this.parentElement)">❤️ Salvar</button>
-</div>
-`;
-
-document.getElementById("resultado").innerHTML=card;
-document.getElementById("loading").style.display="none";
-
-},1000);
+if(localStorage.getItem("logado")){
+mostrar()
 }
 
-function salvar(card){
-saved.push(card.innerHTML);
-document.getElementById("salvas").innerHTML=saved.map(s=>`<div class="card">${s}</div>`).join("");
+function mostrar(){
+document.getElementById("loginBox").classList.add("hidden")
+document.getElementById("geradorBox").classList.remove("hidden")
 }
 
-function gerarKey(){
-let key="KRAZY"+Math.floor(Math.random()*900+100);
-validKeys.push(key);
-alert("Nova Key: "+key);
+// GERAR
+function gerar(){
+
+let modo = document.getElementById("modo").value
+let geral
+
+if(modo=="controle") geral=rand(80,120)
+if(modo=="balanceado") geral=rand(120,160)
+if(modo=="rapido") geral=rand(185,200)
+
+let red=geral-rand(5,15)
+let x2=geral-rand(10,20)
+let x4=geral-rand(15,25)
+let awm=rand(30,60)
+let olh=geral+rand(0,5)
+
+ultimaSensi = `
+Geral: ${geral}
+Red Dot: ${red}
+2x: ${x2}
+4x: ${x4}
+AWM: ${awm}
+Olhadinha: ${olh}
+`
+
+let res=document.getElementById("resultado")
+res.innerHTML=ultimaSensi.replace(/\n/g,"<br>")
+res.classList.remove("hidden")
+
+document.getElementById("saveBtn").classList.remove("hidden")
+document.getElementById("copyBtn").classList.remove("hidden")
 }
+
+// SALVAR
+function salvar(){
+localStorage.setItem("sensi",ultimaSensi)
+alert("Salvo!")
+}
+
+// COPIAR
+function copiar(){
+navigator.clipboard.writeText(ultimaSensi)
+alert("Copiado!")
+}
+
+// ADM
+function clickTitulo(){
+clicks++
+if(clicks>=7){
+document.getElementById("admBox").classList.toggle("hidden")
+clicks=0
+}
+}
+
+function entrarAdm(){
+let s=document.getElementById("senhaAdm").value
+if(s==="krazyadm071110"){
+document.getElementById("admArea").classList.remove("hidden")
+}else{
+alert("Senha errada")
+}
+}
+
+function gerarNovaKey(){
+KEY="KRAZY"+rand(1000,9999)
+localStorage.setItem("key",KEY)
+document.getElementById("keyGerada").innerHTML="Nova Key: "+KEY
+}
+
+function resetarKey(){
+localStorage.removeItem("key")
+localStorage.removeItem("logado")
+location.reload()
+}
+
+// RANDOM
+function rand(a,b){
+return Math.floor(Math.random()*(b-a+1))+a
+}
+
 </script>
 
 </body>
